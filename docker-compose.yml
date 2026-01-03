@@ -1,10 +1,11 @@
 services:
   metabase:
     container_name: metabase
-    image: bobblybook/metabase:latest
+    image: metabase/metabase:latest
     ports:
       - "3000:3000"
     environment:
+      - MB_SITE_URL=https://${MB_DOMAIN}     # ← 1) для корректных ссылок
       - MB_DB_TYPE=${MB_DB_TYPE}
       - MB_DB_DBNAME=${MB_DB_NAME}
       - MB_DB_PORT=${MB_DB_PORT}
@@ -13,8 +14,11 @@ services:
       - MB_DB_HOST=db
     volumes:
       - metabase-data:/metabase-data
+    extra_hosts:
+      - "api.gift-rolls.com:host-gateway"
     networks:
       - metabase-network
+      - network                          # ← 2) подключили к общей сети
 
   db:
     image: postgres:latest
@@ -38,3 +42,5 @@ volumes:
 networks:
   metabase-network:
     name: metabase-network
+  network:                               # ← 3) описали внешнюю сеть
+    external: true
