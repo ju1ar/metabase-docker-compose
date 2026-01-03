@@ -21,7 +21,7 @@ services:
       - network                          # ← 2) подключили к общей сети
 
   db:
-    image: postgres:latest
+    image: postgres:17
     ports:
       - "${MB_DB_PORT}:${MB_DB_PORT}"
     environment:
